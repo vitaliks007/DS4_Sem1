@@ -1,0 +1,98 @@
+#include <iostream>;
+#include <string>;
+using namespace std;
+
+int per(string sym)
+{
+	int x;
+	if (sym == "I")
+		x = 1;
+	if (sym == "V")
+		x = 5;
+	if (sym == "X")
+		x = 10;
+	if (sym == "L")
+		x = 50;
+	if (sym == "C")
+		x = 100;
+	if (sym == "D")
+		x = 500;
+	if (sym == "M")
+		x = 1000;
+	return x;
+}
+
+string obr_per(int x, string sym)
+{
+	string x_sym;
+	string sym_s0, sym_s1, sym_s2;
+	sym_s0 = sym.substr(0, 1);
+	sym_s1 = sym.substr(1, 1);
+	sym_s2 = sym.substr(2, 1);
+	x_sym = "";
+	switch (x)
+	{
+		case 1: x_sym = sym_s0; break;
+		case 2: x_sym = sym_s0 + sym_s0; break;
+		case 3: x_sym = sym_s0 + sym_s0 + sym_s0; break;
+		case 4: x_sym = sym_s0 + sym_s1; break;
+		case 5: x_sym = sym_s1; break;
+		case 6: x_sym = sym_s1 + sym_s0; break;
+		case 7: x_sym = sym_s1 + sym_s0 + sym_s0; break;
+		case 8: x_sym = sym_s1 + sym_s0 + sym_s0 + sym_s0; break;
+		case 9: x_sym = sym_s0 + sym_s2; break;
+		case 0: x_sym = ""; break;
+		default: x_sym = "ERROR!"; break;
+	}
+	return x_sym;
+}
+
+string rim(int x)
+{
+	string st;
+	int i, cif;
+	string sym_r0 = "IVX";
+	string sym_r1 = "XLC";
+	string sym_r2 = "CDM";
+	string sym_r3 = "MEE";
+	string sym[4] = { sym_r0, sym_r1, sym_r2, sym_r3 };
+	st = "";
+
+	for (i = 0; i < 4; i++)
+	{
+		cif = x % 10;
+		x = x / 10;
+		st = obr_per(cif, sym[i]) + st;
+	}
+
+	return st;
+}
+
+int main()
+{
+	setlocale(0, "");
+	string st, test;
+	int i, sum, x, x_pr;
+	test = "E";
+	do
+	{
+		cin >> st;
+
+		x_pr = 0;
+		sum = 0;
+		for (i = 0; i < st.length(); i++)
+		{
+			x = per(st.substr(i, 1));
+			if (x > x_pr)
+				sum += x - 2 * x_pr;
+			else
+				sum += x;
+			x_pr = x;
+		}
+		if (rim(sum) != st)
+			cout << "Введенное число некорректно!" << endl;
+	} while (rim(sum) != st);
+
+	cout << sum;
+	return 0;
+}
